@@ -4,7 +4,7 @@
 	"settings-schema": "org.gnome.shell.extensions.walnut",
 	"gettext-domain": "gnome-shell-extensions-walnut",
 	"shell-version": [
-		"3.32"
+		"3.34"
 	],
 	"url": "https://github.com/zykh/walNUT",
 	"uuid": "walnut@networkupstools"

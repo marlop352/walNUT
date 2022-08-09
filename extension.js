@@ -1964,7 +1964,8 @@ class	walNUT extends PanelMenu.Button {
 });
 
 // CredDialog: prompt user for valid credentials (username and password)
-const	CredDialog = class extends ModalDialog.ModalDialog {
+const	CredDialog = GObject.registerClass(
+class	CredDialog extends ModalDialog.ModalDialog {
 
 	// args = {
 	//	device: device for which authenticate
@@ -1972,9 +1973,9 @@ const	CredDialog = class extends ModalDialog.ModalDialog {
 	//	password: password to use to authenticate
 	//	error: whether to show error 'Wrong username/password' or not
 	// }
-	constructor(args) {
+	_init(args) {
 
-		super({ styleClass: 'prompt-dialog' });
+		super._init({ styleClass: 'prompt-dialog' });
 
 		this._device = args.device;
 		let user = args.username;
@@ -2203,10 +2204,11 @@ const	CredDialog = class extends ModalDialog.ModalDialog {
 		this.close(global.get_current_time());
 
 	}
-};
+});
 
 // CredDialogCmd: credential dialog for instant commands
-const	CredDialogCmd = class extends CredDialog {
+const	CredDialogCmd = GObject.registerClass(
+class	CredDialogCmd extends CredDialog {
 
 	// args = {
 	//	device: device which should get args.*command*
@@ -2216,9 +2218,9 @@ const	CredDialogCmd = class extends CredDialog {
 	//	extradata: extradata to pass to args.*command*
 	//	error: whether username/password proved to be wrong
 	// }
-	constructor(args) {
+	_init(args) {
 
-		super({
+		super._init({
 			device: args.device,
 			username: args.username,
 			password: args.password,
@@ -2255,7 +2257,7 @@ const	CredDialogCmd = class extends CredDialog {
 		super._onOk();
 
 	}
-};
+});
 
 // CredDialogSetvar: credential dialog for setvars
 const	CredDialogSetvar = class extends CredDialog {
@@ -2712,11 +2714,12 @@ const	Button = class {
 };
 
 // BottomControls: container of bottom buttons
-const	BottomControls = class extends PopupMenu.PopupBaseMenuItem {
+const	BottomControls = GObject.registerClass(
+class	BottomControls extends PopupMenu.PopupBaseMenuItem {
 
-	constructor() {
+	_init() {
 
-		super({
+		super._init({
 			reactive: false,
 			can_focus: false
 		});
@@ -2758,7 +2761,7 @@ const	BottomControls = class extends PopupMenu.PopupBaseMenuItem {
 			args.button.actor.reactive = false;
 
 	}
-};
+});
 
 // CmdPopupSubMenu: a PopupSubMenu for UpsCmdList: we need this so that we can update the submenu (= populate the PopupSubMenu) only and every time the menu is opened
 const	CmdPopupSubMenu = class extends PopupMenu.PopupSubMenu {
@@ -2800,12 +2803,13 @@ const	CmdPopupSubMenu = class extends PopupMenu.PopupSubMenu {
 };
 
 // UpsCmdList: a submenu listing UPS commands
-const	UpsCmdList = class extends PopupMenu.PopupSubMenuMenuItem {
+const	UpsCmdList = GObject.registerClass(
+class	UpsCmdList extends PopupMenu.PopupSubMenuMenuItem {
 
-	constructor() {
+	_init() {
 
 		// TRANSLATORS: Label of UPS commands sub menu
-		super(_("UPS Commands"));
+		super._init(_("UPS Commands"));
 
 		// Command's extradata
 
@@ -2824,8 +2828,8 @@ const	UpsCmdList = class extends PopupMenu.PopupSubMenuMenuItem {
 		labelBox.add(this.label);
 
 		// Connect key focus
-		labelBox.connect('key-focus-in', Lang.bind(this, this._onKeyFocusIn));
-		labelBox.connect('key-focus-out', Lang.bind(this, this._onKeyFocusOut));
+		labelBox.connect('key-focus-in', Lang.bind(this, this.vfunc_key_focus_in));
+		labelBox.connect('key-focus-out', Lang.bind(this, this.vfunc_key_focus_out));
 
 		// Remove the expander
 		let expander = labelBox.get_next_sibling();
@@ -3019,16 +3023,16 @@ const	UpsCmdList = class extends PopupMenu.PopupSubMenuMenuItem {
 		// If the submenu is not empty, destroy all children
 		this.clean();
 
-		this.actor.hide();
+		//this.actor.hide();
 
 	}
 
 	show() {
 
-		this.actor.show();
+		//this.actor.show();
 
 	}
-};
+});
 
 // SetvarBox: box used to handle setvars
 const	SetvarBox = class extends PopupMenu.PopupMenuSection {
@@ -3903,7 +3907,8 @@ const	SetvarBoxString = class extends SetvarBox {
 };
 
 // RawDataButton: expander/name/value
-const	RawDataButton = class extends PopupMenu.PopupBaseMenuItem {
+const	RawDataButton = GObject.registerClass(
+class	RawDataButton extends PopupMenu.PopupBaseMenuItem {
 
 	// args = {
 	//	varName: name of the variable
@@ -3911,14 +3916,14 @@ const	RawDataButton = class extends PopupMenu.PopupBaseMenuItem {
 	//	setvarBox: child setvar box; if not set, the item won't be activatable
 	//	scrollView: container that should be scrolled to ensure visibility of elements
 	// }
-	constructor(args) {
+	_init(args) {
 
 		if (args.setvarBox != null) {
-			super();
+			super._init();
 			this.actor.add_accessible_state(Atk.StateType.EXPANDABLE);
 			this.setOrnament(RawDataButtonOrnament.CLOSED);
 		} else {
-			super({ activate: false });
+			super._init({ activate: false });
 		}
 
 		this._setvarBox = args.setvarBox;
@@ -4030,7 +4035,7 @@ const	RawDataButton = class extends PopupMenu.PopupBaseMenuItem {
 		this._varValue.text = Utilities.parseText(value, Lengths.RAW_VALUE);
 
 	}
-};
+});
 
 // UpsRawDataItem: each item of the raw data submenu
 const	UpsRawDataItem = class extends PopupMenu.PopupMenuSection {
@@ -4169,12 +4174,13 @@ const	UpsRawDataItem = class extends PopupMenu.PopupMenuSection {
 };
 
 // UpsRawDataList: list UPS's raw data in a submenu
-const	UpsRawDataList = class extends PopupMenu.PopupSubMenuMenuItem {
+const	UpsRawDataList = GObject.registerClass(
+class	UpsRawDataList extends PopupMenu.PopupSubMenuMenuItem {
 
-	constructor() {
+	_init() {
 
 		// TRANSLATORS: Label of raw data submenu
-		super(_("Raw Data"));
+		super._init(_("Raw Data"));
 
 	}
 
@@ -4354,16 +4360,16 @@ const	UpsRawDataList = class extends PopupMenu.PopupSubMenuMenuItem {
 		if (!this.menu.isEmpty())
 			this.menu.removeAll();
 
-		this.actor.hide();
+		//this.actor.hide();
 
 	}
 
 	show() {
 
-		this.actor.show();
+		//this.actor.show();
 
 	}
-};
+});
 
 // UpsDataTableAlt: Alternative, less noisy, data table
 const	UpsDataTableAlt = class extends PopupMenu.PopupMenuSection {
@@ -4438,11 +4444,12 @@ const	UpsDataTableAlt = class extends PopupMenu.PopupMenuSection {
 };
 
 // UpsDataTableAltItem: Alternative, less noisy, data table - item
-const	UpsDataTableAltItem = class extends PopupMenu.PopupBaseMenuItem {
+const	UpsDataTableAltItem = GObject.registerClass(
+class	UpsDataTableAltItem extends PopupMenu.PopupBaseMenuItem {
 
-	constructor() {
+	_init() {
 
-		super({ activate: false });
+		super._init({ activate: false });
 
 		// Icon
 		this.icon = new St.Icon({ style_class: 'popup-menu-icon' });
@@ -4488,23 +4495,24 @@ const	UpsDataTableAltItem = class extends PopupMenu.PopupBaseMenuItem {
 
 	hide() {
 
-		this.actor.hide();
+		//this.actor.hide();
 
 	}
 
 	show() {
 
-		this.actor.show();
+		//this.actor.show();
 
 	}
-};
+});
 
 // UpsTopDataList: List (if available/any) ups.{status,alarm}
-const	UpsTopDataList = class extends PopupMenu.PopupBaseMenuItem {
+const	UpsTopDataList = GObject.registerClass(
+class	UpsTopDataList extends PopupMenu.PopupBaseMenuItem {
 
-	constructor() {
+	_init() {
 
-		super({
+		super._init({
 			reactive: true,
 			activate: false,
 			hover: false,
@@ -4612,7 +4620,7 @@ const	UpsTopDataList = class extends PopupMenu.PopupBaseMenuItem {
 
 		// All UpsTopDataList
 		if (!args || !args.type) {
-			this.actor.hide();
+			//this.actor.hide();
 			return;
 		}
 
@@ -4626,17 +4634,18 @@ const	UpsTopDataList = class extends PopupMenu.PopupBaseMenuItem {
 
 	show() {
 
-		this.actor.show();
+		//this.actor.show();
 
 	}
-};
+});
 
 // UpsModel: List chosen UPS's model/manufacturer (if available)
-const	UpsModel = class extends PopupMenu.PopupBaseMenuItem {
+const	UpsModel = GObject.registerClass(
+class	UpsModel extends PopupMenu.PopupBaseMenuItem {
 
-	constructor() {
+	_init() {
 
-		super({
+		super._init({
 			reactive: true,
 			activate: false,
 			hover: false,
@@ -4653,7 +4662,7 @@ const	UpsModel = class extends PopupMenu.PopupBaseMenuItem {
 
 		this.label.text = '';
 
-		this.actor.hide();
+		//this.actor.hide();
 
 	}
 
@@ -4679,17 +4688,18 @@ const	UpsModel = class extends PopupMenu.PopupBaseMenuItem {
 
 		this.label.text = text;
 
-		this.actor.show();
+		//this.actor.show();
 
 	}
-};
+});
 
 // UpsList: a submenu listing available UPSes in a upsc-like way (i.e. ups@hostname:port)
-const	UpsList = class extends PopupMenu.PopupSubMenuMenuItem {
+const	UpsList = GObject.registerClass(
+class	UpsList extends PopupMenu.PopupSubMenuMenuItem {
 
-	constructor() {
+	_init() {
 
-		super('');
+		super._init('');
 
 	}
 
@@ -4785,23 +4795,24 @@ const	UpsList = class extends PopupMenu.PopupSubMenuMenuItem {
 		if (!this.menu.isEmpty())
 			this.menu.removeAll();
 
-		this.actor.hide();
+		//this.actor.hide();
 
 	}
 
 	show() {
 
-		this.actor.show();
+		//this.actor.show();
 
 	}
-};
+});
 
 // ErrorBox: a box to display errors (if any)
-const	ErrorBox = class extends PopupMenu.PopupBaseMenuItem {
+const	ErrorBox = GObject.registerClass(
+class	ErrorBox extends PopupMenu.PopupBaseMenuItem {
 
-	constructor() {
+	_init() {
 
-		super({
+		super._init({
 			reactive: true,
 			activate: false,
 			hover: false,
@@ -4844,7 +4855,7 @@ const	ErrorBox = class extends PopupMenu.PopupBaseMenuItem {
 		this.label.text = '';
 		this.desc.text = '';
 
-		this.actor.hide();
+		//this.actor.hide();
 
 	}
 
@@ -4875,10 +4886,10 @@ const	ErrorBox = class extends PopupMenu.PopupBaseMenuItem {
 		this.label.text = Utilities.parseText(label, Lengths.ERR_LABEL);
 		this.desc.text = Utilities.parseText(desc, Lengths.ERR_DESC);
 
-		this.actor.show();
+		//this.actor.show();
 
 	}
-};
+});
 
 // Panel menu
 const	walNUTMenu = class extends PopupMenu.PopupMenu {
