@@ -1469,11 +1469,11 @@ class	walNUT extends PanelMenu.Button {
 		_btnBox.add(this._icon);
 		_btnBox.add(this._status);
 
-		this.actor.add_actor(_btnBox);
-		this.actor.add_style_class_name('panel-status-button');
+		this.add_actor(_btnBox);
+		this.add_style_class_name('panel-status-button');
 
 		// Menu
-		let menu = new walNUTMenu({ sourceActor: this.actor });
+		let menu = new walNUTMenu({ sourceActor: this });
 		this.setMenu(menu);
 
 		// Bottom Buttons
@@ -1985,56 +1985,53 @@ class	CredDialog extends ModalDialog.ModalDialog {
 		// Main container
 		let container = new St.BoxLayout({
 			style_class: 'prompt-dialog-main-layout message-dialog-main-layout',
-			vertical: false
+			vertical: false/**/,
+			x_expand: true,
+			y_expand: true/**/
 		});
-		this.contentLayout.add(container, {
-			x_fill: true,
-			y_fill: true
-		});
+		this.contentLayout.add(container);
 
 		// Icon
 		let icon = new St.Icon({
 			gicon: MiscIcons.Credentials,
-			style_class: 'message-dialog-icon'
-		});
-		container.add(icon, {
-			x_fill: true,
-			y_fill: false,
+			style_class: 'message-dialog-icon',
+			x_expand: true,
+			y_expand: false,
 			x_align: St.Align.END,
 			y_align: St.Align.START
 		});
+		container.add(icon);
 
 		// Container for messages and username and password entries
 		let textBox = new St.BoxLayout({
 			style_class: 'prompt-dialog-message-layout message-dialog-content',
-			vertical: true
+			vertical: true,
+			y_align: St.Align.START
 		});
-		container.add(textBox, { y_align: St.Align.START });
+		container.add(textBox);
 
 		// Label
 		let label = new St.Label({
 			// TRANSLATORS: Label of credentials dialog
 			text: _("UPS Credentials"),
-			style_class: 'prompt-dialog-headline message-dialog-title headline'
-		});
-		textBox.add(label, {
-			y_fill: false,
+			style_class: 'prompt-dialog-headline message-dialog-title headline',
+			y_expand: false,
 			y_align: St.Align.START
 		});
+		textBox.add(label);
 
 		// Description
 		this.desc = new St.Label({
 			text: '',
-			style_class: 'prompt-dialog-description message-dialog-body'
+			style_class: 'prompt-dialog-description message-dialog-body'/**/,
+			x_expand: true,
+			y_expand: true/**/,
+			y_align: St.Align.START
 		});
 		this.desc.clutter_text.line_wrap = true;
 		this.desc.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
 		this.desc.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-		textBox.add(this.desc, {
-			y_fill: true,
-			y_align: St.Align.START,
-			expand: true
-		});
+		textBox.add(this.desc);
 
 		// Username/password table
 		let table = new St.BoxLayout({ style_class: 'walnut-cred-dialog-table' });
@@ -2057,7 +2054,7 @@ class	CredDialog extends ModalDialog.ModalDialog {
 		});
 
 		// Username right-click menu
-		ShellEntry.addContextMenu(this.user, { isPassword: false });
+		ShellEntry.addContextMenu(this.user);
 
 		// user_valid tells us whether a username is set or not
 		this.user_valid = user ? true : false;
@@ -2081,14 +2078,14 @@ class	CredDialog extends ModalDialog.ModalDialog {
 		});
 
 		// Password entry
-		this.pw = new St.Entry({
+		this.pw = new St.PasswordEntry({
 			text: pw || '',
 			can_focus: true,
 			reactive: true
 		});
 
 		// Password right-click menu
-		ShellEntry.addContextMenu(this.pw, { isPassword: true });
+		ShellEntry.addContextMenu(this.pw);
 
 		// Password visual appearance (hidden)
 		this.pw.clutter_text.set_password_char('\u25cf');
@@ -2114,16 +2111,22 @@ class	CredDialog extends ModalDialog.ModalDialog {
 		labelColumn.add(pwLabel);
 		let entryColumn = new St.BoxLayout({
 			style_class: 'walnut-cred-dialog-table-column',
-			vertical: true
+			vertical: true,
+            x_expand: true,
+            y_expand: true
 		});
 		entryColumn.add(this.user);
 		entryColumn.add(this.pw);
 		table.add(labelColumn);
-		table.add(entryColumn, { expand: true });
+		table.add(entryColumn);
 
 		// Error box
-		let errorBox = new St.BoxLayout({ style_class: 'walnut-cred-dialog-error-box' });
-		textBox.add(errorBox, { expand: true });
+		let errorBox = new St.BoxLayout({
+			style_class: 'walnut-cred-dialog-error-box',
+            x_expand: true,
+            y_expand: true
+		});
+		textBox.add(errorBox);
 
 		// Hide error box if no error has been reported
 		if (error)
@@ -2134,22 +2137,22 @@ class	CredDialog extends ModalDialog.ModalDialog {
 		// Error Icon
 		let errorIcon = new St.Icon({
 			gicon: MiscIcons.Error,
-			style_class: 'walnut-cred-dialog-error-icon'
+			style_class: 'walnut-cred-dialog-error-icon',
+			y_align: St.Align.MIDDLE
 		});
-		errorBox.add(errorIcon, { y_align: St.Align.MIDDLE });
+		errorBox.add(errorIcon);
 
 		// Error message
 		let errorText = new St.Label({
 			// TRANSLATORS: Error message @ credentials dialog
 			text: _("Wrong username or password"),
-			style_class: 'walnut-cred-dialog-error-label'
+			style_class: 'walnut-cred-dialog-error-label',
+			x_expand: true,
+			y_align: St.Align.MIDDLE,
+			y_expand: false
 		});
 		errorText.clutter_text.line_wrap = true;
-		errorBox.add(errorText, {
-			expand: true,
-			y_align: St.Align.MIDDLE,
-			y_fill: false
-		});
+		errorBox.add(errorText);
 
 		this.ok = {
 			// TRANSLATORS: Execute button @ credentials dialog
@@ -2330,10 +2333,11 @@ const	YesNoSubMenu = class extends PopupMenu.PopupMenuSection {
 		let titleLabel = new St.Label({
 			text: args.title,
 			style_class: 'walnut-yesnosubmenu-title',
+            //x_expand: true,
 			y_expand: true,
 			y_align: Clutter.ActorAlign.CENTER
 		});
-		titleRow.actor.add(titleLabel, { expand: true });
+		titleRow.actor.add(titleLabel);
 		titleRow.actor.label_actor = titleLabel;
 		titleRow.actor.add_style_pseudo_class('checked');
 		this.addMenuItem(titleRow);
@@ -2349,22 +2353,27 @@ const	YesNoSubMenu = class extends PopupMenu.PopupMenuSection {
 		// Container of box-specific data
 		this.container = new St.BoxLayout({
 			vertical: false,
+			//y_expand: true,
 			x_expand: true
 		});
-		dataRow.actor.add(this.container, { expand: true });
+		dataRow.actor.add(this.container);
 
 		// Cancel/Confirm buttons
 		this.del = new Button({
 			gicon: MiscIcons.Cancel,
 			// TRANSLATORS: Accessible name of 'Cancel' button @ Yes/No submenus
 			accessibleName: _("Cancel"),
-			size: 'small'
+			size: 'small'/**/,
+			x_expand: false,
+			y_expand: false/**/
 		});
 		this.go = new Button({
 			gicon: MiscIcons.OK,
 			// TRANSLATORS: Accessible name of 'Confirm' button @ Yes/No submenus
 			accessibleName: _("Confirm"),
-			size: 'small'
+			size: 'small'/**/,
+			x_expand: false,
+			y_expand: false/**/
 		});
 
 		// Buttons container
@@ -2372,14 +2381,8 @@ const	YesNoSubMenu = class extends PopupMenu.PopupMenuSection {
 			vertical: false,
 			style_class: 'walnut-yesnosubmenu-buttons-box'
 		});
-		buttons.add(this.del.actor, {
-			x_fill: false,
-			y_fill: false
-		});
-		buttons.add(this.go.actor, {
-			x_fill: false,
-			y_fill: false
-		});
+		buttons.add(this.del.actor);
+		buttons.add(this.go.actor);
 		dataRow.actor.add(buttons);
 
 		this.connect('open-state-changed', Lang.bind(this, this._subMenuOpenStateChanged));
@@ -2476,9 +2479,11 @@ const	DelBox = class extends YesNoSubMenu {
 		// Text
 		let text = new St.Label({
 			// TRANSLATORS: Description @ delete device box
-			text: Utilities.parseText(_("Do you really want to delete the current UPS from the list?"), 30)
+			text: Utilities.parseText(_("Do you really want to delete the current UPS from the list?"), 30),
+            x_expand: true,
+            y_expand: true
 		});
-		this.container.add(text, { expand: true });
+		this.container.add(text);
 
 		// Set callback functions for cancel/confirm buttons
 		this.del.setCallback(Lang.bind(this, function() {
@@ -2515,9 +2520,11 @@ const	CredBox = class extends YesNoSubMenu {
 			// TRANSLATORS: Username hint @ credentials box
 			hint_text: _("username"),
 			can_focus: true,
-			style_class: 'walnut-credbox-username'
+			style_class: 'walnut-credbox-username',
+            x_expand: true,
+            y_expand: true
 		});
-		this.container.add(this.user, { expand: true });
+		this.container.add(this.user);
 
 		// Password
 		this.pw = new St.Entry({
@@ -2525,10 +2532,12 @@ const	CredBox = class extends YesNoSubMenu {
 			// TRANSLATORS: Password hint @ credentials box
 			hint_text: _("password"),
 			can_focus: true,
-			style_class: 'walnut-credbox-password'
+			style_class: 'walnut-credbox-password',
+            x_expand: true,
+            y_expand: true
 		});
 		this.pw.clutter_text.connect('text-changed', Lang.bind(this, this._updatePwAppearance));
-		this.container.add(this.pw, { expand: true });
+		this.container.add(this.pw);
 
 		// Set callback functions for cancel/confirm buttons
 		this.del.setCallback(Lang.bind(this, function() {
@@ -2614,18 +2623,22 @@ const	AddBox = class extends YesNoSubMenu {
 			// TRANSLATORS: Hostname hint @ find new devices box
 			hint_text: _("hostname"),
 			can_focus: true,
-			style_class: 'walnut-addbox-host'
+			style_class: 'walnut-addbox-host',
+            x_expand: true,
+            y_expand: true
 		});
-		this.container.add(this.hostname, { expand: true });
+		this.container.add(this.hostname);
 
 		// Port
 		this.port = new St.Entry({
 			// TRANSLATORS: Port hint @ find new devices box
 			hint_text: _("port"),
 			can_focus: true,
-			style_class: 'walnut-addbox-port'
+			style_class: 'walnut-addbox-port',
+            x_expand: true,
+            y_expand: true
 		});
-		this.container.add(this.port, { expand: true });
+		this.container.add(this.port);
 
 		// Set callback functions for cancel/confirm buttons
 		this.del.setCallback(Lang.bind(this, function() {
@@ -2734,9 +2747,8 @@ class	BottomControls extends PopupMenu.PopupBaseMenuItem {
 	addControl(args) {
 
 		this.actor.add(args.button.actor, {
-			expand: true,
-			x_fill: false,
-			y_fill: false
+			x_expand: false,
+			y_expand: false
 		});
 
 		this.setControl(args);
@@ -3166,8 +3178,12 @@ const	SetvarBoxRanges = class extends SetvarBox {
 
 		// Slider
 		this._slider = new Slider.Slider(0.5);
-		let sliderItem = new PopupMenu.PopupBaseMenuItem({ activate: false });
-		sliderItem.actor.add(this._slider.actor, { expand: true });
+		let sliderItem = new PopupMenu.PopupBaseMenuItem({
+			activate: false,
+            x_expand: true,
+            y_expand: true
+		});
+		sliderItem.actor.add(this._slider.actor);
 		sliderItem.actor.connect('button-press-event', Lang.bind(this, function(actor, event) {
 			return this._slider.startDragging(event);
 		}));
@@ -3181,8 +3197,12 @@ const	SetvarBoxRanges = class extends SetvarBox {
 			this._slider.actor.set_scale_with_gravity(-1.0, 1.0, Clutter.Gravity.NORTH);
 
 		// Labels box
-		let rangeValueBox = new St.BoxLayout({ style_class: 'popup-menu-item' });
-		this.actor.add(rangeValueBox, { expand: true });
+		let rangeValueBox = new St.BoxLayout({
+			style_class: 'popup-menu-item',
+            x_expand: true,
+            y_expand: true
+		});
+		this.actor.add(rangeValueBox);
 
 		// Spacer
 		let spacer = new St.Label({ style_class: 'popup-menu-ornament' });
@@ -3218,13 +3238,12 @@ const	SetvarBoxRanges = class extends SetvarBox {
 			gicon: MiscIcons.Minus,
 			// TRANSLATORS: Accessible name of 'Decrement' button @ setvar ranges
 			accessibleName: _("Decrement by one"),
-			size: 'small'
+			size: 'small'/**/,
+			x_expand: false,
+			y_expand: false/**/
 		});
 		rangeValueBox.insert_child_below(this._minus.actor, this._rangeActLabel);
-		rangeValueBox.child_set(this._minus.actor, {
-			x_fill: false,
-			y_fill: false
-		});
+		rangeValueBox.child_set(this._minus.actor);
 
 		this._minus.actor.connect('button-release-event', Lang.bind(this, this._minusAction));
 		this._minus.actor.connect('key-press-event', Lang.bind(this, function(actor, event) {
@@ -3240,13 +3259,12 @@ const	SetvarBoxRanges = class extends SetvarBox {
 			gicon: MiscIcons.Plus,
 			// TRANSLATORS: Accessible name of 'Increment' button @ setvar ranges
 			accessibleName: _("Increment by one"),
-			size: 'small'
+			size: 'small'/**/,
+			x_expand: false,
+			y_expand: false/**/
 		});
 		rangeValueBox.insert_child_above(this._plus.actor, this._rangeActLabel);
-		rangeValueBox.child_set(this._plus.actor, {
-			x_fill: false,
-			y_fill: false
-		});
+		rangeValueBox.child_set(this._plus.actor);
 
 		this._plus.actor.connect('button-release-event', Lang.bind(this, this._plusAction));
 		this._plus.actor.connect('key-press-event', Lang.bind(this, function(actor, event) {
@@ -3274,7 +3292,9 @@ const	SetvarBoxRanges = class extends SetvarBox {
 				this._parent.fold();
 
 			}),
-			size: 'small'
+			size: 'small'/**/,
+			x_expand: false,
+			y_expand: false/**/
 		});
 
 		this._go = new Button({
@@ -3296,7 +3316,9 @@ const	SetvarBoxRanges = class extends SetvarBox {
 				this.itemActivated();
 
 			}),
-			size: 'small'
+			size: 'small'/**/,
+			x_expand: false,
+			y_expand: false/**/
 		});
 
 		// Buttons box
@@ -3304,14 +3326,8 @@ const	SetvarBoxRanges = class extends SetvarBox {
 			vertical: false,
 			style_class: 'walnut-setvar-buttons-box'
 		});
-		btns.add(del.actor, {
-			x_fill: false,
-			y_fill: false
-		});
-		btns.add(this._go.actor, {
-			x_fill: false,
-			y_fill: false
-		});
+		btns.add(del.actor);
+		btns.add(this._go.actor);
 		rangeValueBox.add(btns);
 
 		// Connect slider
@@ -3731,9 +3747,11 @@ const	SetvarBoxString = class extends SetvarBox {
 		let container = new St.BoxLayout({
 			can_focus: false,
 			track_hover: false,
-			style_class: 'popup-menu-item'
+			style_class: 'popup-menu-item',
+            x_expand: true,
+            y_expand: true
 		});
-		this.actor.add(container, { expand: true });
+		this.actor.add(container);
 
 		// Spacer
 		let spacer = new St.Label({ style_class: 'popup-menu-ornament' });
@@ -3778,9 +3796,11 @@ const	SetvarBoxString = class extends SetvarBox {
 			hint_text: _("set this variable to.."),
 			can_focus: true,
 			reactive: true,
-			style_class: 'walnut-setvar-string-entry'
+			style_class: 'walnut-setvar-string-entry',
+            x_expand: true,
+            y_expand: true
 		});
-		container.add(this._entry, { expand: true });
+		container.add(this._entry);
 
 		this._entry.clutter_text.connect('text-changed', Lang.bind(this, function() {
 
@@ -3812,7 +3832,9 @@ const	SetvarBoxString = class extends SetvarBox {
 				this._parent.fold();
 
 			}),
-			size: 'small'
+			size: 'small'/**/,
+			x_expand: false,
+			y_expand: false/**/
 		});
 
 		this._go = new Button({
@@ -3834,7 +3856,9 @@ const	SetvarBoxString = class extends SetvarBox {
 				this.itemActivated();
 
 			}),
-			size: 'small'
+			size: 'small'/**/,
+			x_expand: false,
+			y_expand: false/**/
 		});
 
 		this._valueToSet = this._actualValue;
@@ -3846,14 +3870,8 @@ const	SetvarBoxString = class extends SetvarBox {
 			vertical: false,
 			style_class: 'walnut-setvar-buttons-box'
 		});
-		btns.add(del.actor, {
-			x_fill: false,
-			y_fill: false
-		});
-		btns.add(this._go.actor, {
-			x_fill: false,
-			y_fill: false
-		});
+		btns.add(del.actor);
+		btns.add(this._go.actor);
 		container.add(btns);
 
 		// Scroll the menu when items get key-focus
@@ -3931,11 +3949,12 @@ class	RawDataButton extends PopupMenu.PopupBaseMenuItem {
 		// Variable's name
 		this._varName = new St.Label({
 			text: '',
-			y_expand: true,
+            //x_expand: true,
+            y_expand: true,
 			y_align: Clutter.ActorAlign.CENTER
 		});
 		this.varName = args.varName;
-		this.actor.add(this._varName, { expand: true });
+		this.actor.add(this._varName);
 		this.actor.label_actor = this._varName;
 
 		// Variable's value
@@ -4459,9 +4478,10 @@ class	UpsDataTableAltItem extends PopupMenu.PopupBaseMenuItem {
 		this.label = new St.Label({
 			text: '',
 			y_expand: true,
+			//x_expand: true,
 			y_align: Clutter.ActorAlign.CENTER
 		});
-		this.actor.add(this.label, { expand: true });
+		this.actor.add(this.label);
 		this.actor.label_actor = this.label;
 
 		// Value
@@ -4652,9 +4672,13 @@ class	UpsModel extends PopupMenu.PopupBaseMenuItem {
 			can_focus: false
 		});
 
-		this.label = new St.Label({ style_class: 'walnut-ups-model' });
+		this.label = new St.Label({
+			style_class: 'walnut-ups-model',
+            x_expand: true,
+            y_expand: true
+		});
 
-		this.actor.add(this.label, { expand: true });
+		this.actor.add(this.label);
 
 	}
 
@@ -4819,22 +4843,25 @@ class	ErrorBox extends PopupMenu.PopupBaseMenuItem {
 			can_focus: false
 		});
 
-		let eBox = new St.BoxLayout({ vertical: false });
+		let eBox = new St.BoxLayout({
+			vertical: false,
+			x_expand: true,
+			y_expand: true
+		});
 
 		// Box for the message
-		let textBox = new St.BoxLayout({ vertical: true });
+		let textBox = new St.BoxLayout({ vertical: true, y_align: St.Align.START });
 
 		// Icon
 		let icon = new St.Icon({
 			gicon: MiscIcons.Error,
-			style_class: 'walnut-error-icon'
-		});
-		eBox.add(icon, {
-			x_fill: true,
-			y_fill: false,
+			style_class: 'walnut-error-icon',
+			x_expand: true,
+			y_expand: false,
 			x_align: St.Align.END,
 			y_align: St.Align.MIDDLE
 		});
+		eBox.add(icon);
 
 		// Error label
 		this.label = new St.Label({ style_class: 'walnut-error-label' });
@@ -4844,9 +4871,9 @@ class	ErrorBox extends PopupMenu.PopupBaseMenuItem {
 		this.desc = new St.Label({ style_class: 'walnut-error-desc' });
 		textBox.add(this.desc);
 
-		eBox.add(textBox, { y_align: St.Align.START });
+		eBox.add(textBox);
 
-		this.actor.add(eBox, { expand: true });
+		this.actor.add(eBox);
 
 	}
 
