@@ -34,7 +34,7 @@ const	Atk = imports.gi.Atk,
 	ShellEntry = imports.ui.shellEntry,
 	Slider = imports.ui.slider,
 	St = imports.gi.St,
-	Tweener = imports.ui.tweener,
+	Tweener = imports.tweener.tweener,
 	Util = imports.misc.util;
 
 // Gettext
@@ -2746,10 +2746,10 @@ class	BottomControls extends PopupMenu.PopupBaseMenuItem {
 	// }
 	addControl(args) {
 
-		this.actor.add(args.button.actor, {
-			x_expand: false,
-			y_expand: false
-		});
+		args.button.actor.x_expand = false;
+		args.button.actor.y_expand = false;
+
+		this.actor.add(args.button.actor);
 
 		this.setControl(args);
 
