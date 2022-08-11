@@ -229,7 +229,7 @@ const	walNUTPrefsGeneral = new GObject.Class({
 
 		this.parent({
 			orientation: Gtk.Orientation.VERTICAL,
-			margin: 10,
+			//margin: 10,
 			spacing: 10
 		});
 
@@ -243,10 +243,10 @@ const	walNUTPrefsGeneral = new GObject.Class({
 
 		let general = new Gtk.Box({
 			orientation: Gtk.Orientation.VERTICAL,
-			margin_bottom: 10,
-			margin_left: 10,
-			margin_right: 10,
-			margin_top: 0,
+			//'margin-bottom': 10,
+			//'margin-left': 10,
+			//'margin-right': 10,
+			//'margin-top': 0,
 			spacing: 5
 		});
 
@@ -254,25 +254,25 @@ const	walNUTPrefsGeneral = new GObject.Class({
 
 			hbox = buildHbox(settings_general, setting);
 
-			general.add(hbox);
+			general.append(hbox);
 
 		}
 
 		// TRANSLATORS: Label @ preferences widget
 		let generalFrame = new Gtk.Frame({ label: _("General options") });
 
-		generalFrame.add(general);
+		generalFrame.set_child(general);
 
-		this.add(generalFrame);
+		this.append(generalFrame);
 
 		// Panel options
 
 		let panel = new Gtk.Box({
 			orientation: Gtk.Orientation.VERTICAL,
-			margin_bottom: 10,
-			margin_left: 10,
-			margin_right: 10,
-			margin_top: 0,
+			//margin_bottom: 10,
+			//margin_left: 10,
+			//margin_right: 10,
+			//margin_top: 0,
 			spacing: 5
 		});
 
@@ -280,16 +280,16 @@ const	walNUTPrefsGeneral = new GObject.Class({
 
 			hbox = buildHbox(settings_panel, setting);
 
-			panel.add(hbox);
+			panel.append(hbox);
 
 		}
 
 		// TRANSLATORS: Label @ preferences widget
 		let panelFrame = new Gtk.Frame({ label: _("Panel options") });
 
-		panelFrame.add(panel);
+		panelFrame.set_child(panel);
 
-		this.add(panelFrame);
+		this.append(panelFrame);
 
 	}
 });
@@ -304,7 +304,7 @@ const	walNUTPrefsMenu = new GObject.Class({
 
 		this.parent({
 			orientation: Gtk.Orientation.VERTICAL,
-			margin: 10,
+			//margin: 10,
 			spacing: 5
 		});
 
@@ -314,7 +314,7 @@ const	walNUTPrefsMenu = new GObject.Class({
 		// Horizontal boxes
 		let hbox;
 
-		cmd_desc_box = new Gtk.VBox();
+		cmd_desc_box = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
 
 		if (cmd_desc_box.get_direction() == Gtk.TextDirection.RTL)
 			cmd_desc_box.margin_right = 30;
@@ -326,7 +326,7 @@ const	walNUTPrefsMenu = new GObject.Class({
 
 			hbox = buildHbox(settings_cmd_desc, setting);
 
-			cmd_desc_box.add(hbox);
+			cmd_desc_box.append(hbox);
 
 		}
 
@@ -338,10 +338,10 @@ const	walNUTPrefsMenu = new GObject.Class({
 
 			hbox = buildHbox(settings_menu, setting);
 
-			this.add(hbox);
+			this.append(hbox);
 
 			if (setting == 'display_cmd') {
-				this.add(cmd_desc_box);
+				this.append(cmd_desc_box);
 			}
 
 		}
@@ -360,11 +360,11 @@ const	walNUTPrefsWidget = new GObject.Class({
 		this.parent();
 
 		let notebook = new Gtk.Notebook({
-			margin_left: 5,
-			margin_top: 5,
-			margin_bottom: 5,
-			margin_right: 5,
-			expand: true
+			//margin_left: 5,
+			//margin_top: 5,
+			//margin_bottom: 5,
+			//margin_right: 5,
+			//expand: true
 		});
 
 		let general = new walNUTPrefsGeneral();
@@ -373,7 +373,7 @@ const	walNUTPrefsWidget = new GObject.Class({
 		notebook.append_page(general, general.label);
 		notebook.append_page(menu, menu.label);
 
-		this.add(notebook);
+		this.append(notebook);
 
 	}
 });
@@ -383,7 +383,7 @@ function buildPrefsWidget() {
 
 	let preferences = new walNUTPrefsWidget();
 
-	preferences.show_all();
+	//preferences.show_all();
 
 	return preferences;
 
@@ -426,7 +426,7 @@ function createEnumStringSetting(settings, setting) {
 	let model = new Gtk.ListStore();
 	model.set_column_types([ GObject.TYPE_STRING, GObject.TYPE_STRING ]);
 	let setting_enum = new Gtk.ComboBox({ model: model });
-	setting_enum.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
+	//setting_enum.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
 	let renderer = new Gtk.CellRendererText();
 	setting_enum.pack_start(renderer, true);
 	setting_enum.add_attribute(renderer, 'text', 1);
@@ -463,8 +463,8 @@ function createEnumStringSetting(settings, setting) {
 		setting_enum.set_tooltip_text(settings[setting].help)
 	}
 
-	hbox.pack_start(setting_label, true, true, 0);
-	hbox.add(setting_enum);
+	hbox.prepend(setting_label, true, true, 0);
+	hbox.append(setting_enum);
 
 	return hbox;
 
@@ -525,8 +525,8 @@ function createEnumSetting(settings, setting) {
 		setting_enum.set_tooltip_text(settings[setting].help)
 	}
 
-	hbox.pack_start(setting_label, true, true, 0);
-	hbox.add(setting_enum);
+	hbox.prepend(setting_label, true, true, 0);
+	hbox.append(setting_enum);
 
 	return hbox;
 
@@ -563,8 +563,8 @@ function createStringSetting(settings, setting) {
 		setting_string.set_tooltip_text(settings[setting].help)
 	}
 
-	hbox.pack_start(setting_label, true, true, 0);
-	hbox.add(setting_string);
+	hbox.prepend(setting_label, true, true, 0);
+	hbox.append(setting_string);
 
 	return hbox;
 
@@ -602,8 +602,8 @@ function createIntSetting(settings, setting) {
 		setting_int.set_tooltip_text(settings[setting].help)
 	}
 
-	hbox.pack_start(setting_label, true, true, 0);
-	hbox.add(setting_int);
+	hbox.prepend(setting_label, true, true, 0);
+	hbox.append(setting_int);
 
 	return hbox;
 
@@ -638,8 +638,8 @@ function createBoolSetting(settings, setting) {
 		setting_switch.set_tooltip_text(settings[setting].help)
 	}
 
-	hbox.pack_start(setting_label, true, true, 0);
-	hbox.add(setting_switch);
+	hbox.prepend(setting_label, true, true, 0);
+	hbox.append(setting_switch);
 
 	return hbox;
 
@@ -657,7 +657,12 @@ function createRangeSetting(settings, setting) {
 	});
 
 	// Scale
-	let setting_range = Gtk.HScale.new_with_range(settings[setting].min, settings[setting].max, settings[setting].step);
+	let setting_range = Gtk.Scale.new_with_range(
+		Gtk.Orientation.HORIZONTAL,
+		settings[setting].min,
+		settings[setting].max,
+		settings[setting].step
+	);
 	setting_range.set_value(gsettings.get_int(setting.replace(/_/g, '-')));
 	// without numbers
 	//setting_range.set_draw_value(false);
@@ -673,8 +678,8 @@ function createRangeSetting(settings, setting) {
 		setting_range.set_tooltip_text(settings[setting].help)
 	}
 
-	hbox.pack_start(setting_label, true, true, 0);
-	hbox.add(setting_range);
+	hbox.prepend(setting_label, true, true, 0);
+	hbox.append(setting_range);
 
 	return hbox;
 
