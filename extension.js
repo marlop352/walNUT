@@ -2333,7 +2333,7 @@ const	YesNoSubMenu = class extends PopupMenu.PopupMenuSection {
 		let titleLabel = new St.Label({
 			text: args.title,
 			style_class: 'walnut-yesnosubmenu-title',
-            //x_expand: true,
+            x_expand: true,
 			y_expand: true,
 			y_align: Clutter.ActorAlign.CENTER
 		});
@@ -2353,7 +2353,7 @@ const	YesNoSubMenu = class extends PopupMenu.PopupMenuSection {
 		// Container of box-specific data
 		this.container = new St.BoxLayout({
 			vertical: false,
-			//y_expand: true,
+			y_expand: true,
 			x_expand: true
 		});
 		dataRow.actor.add(this.container);
@@ -3949,7 +3949,7 @@ class	RawDataButton extends PopupMenu.PopupBaseMenuItem {
 		// Variable's name
 		this._varName = new St.Label({
 			text: '',
-            //x_expand: true,
+            x_expand: true,
             y_expand: true,
 			y_align: Clutter.ActorAlign.CENTER
 		});
@@ -4478,7 +4478,7 @@ class	UpsDataTableAltItem extends PopupMenu.PopupBaseMenuItem {
 		this.label = new St.Label({
 			text: '',
 			y_expand: true,
-			//x_expand: true,
+			x_expand: true,
 			y_align: Clutter.ActorAlign.CENTER
 		});
 		this.actor.add(this.label);

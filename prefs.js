@@ -229,7 +229,10 @@ const	walNUTPrefsGeneral = new GObject.Class({
 
 		this.parent({
 			orientation: Gtk.Orientation.VERTICAL,
-			//margin: 10,
+			margin_start: 10,
+			margin_top: 10,
+			margin_bottom: 10,
+			margin_end: 10,
 			spacing: 10
 		});
 
@@ -243,10 +246,10 @@ const	walNUTPrefsGeneral = new GObject.Class({
 
 		let general = new Gtk.Box({
 			orientation: Gtk.Orientation.VERTICAL,
-			//'margin-bottom': 10,
-			//'margin-left': 10,
-			//'margin-right': 10,
-			//'margin-top': 0,
+			margin_bottom: 10,
+			margin_start: 10,
+			margin_end: 10,
+			margin_top: 0,
 			spacing: 5
 		});
 
@@ -269,10 +272,10 @@ const	walNUTPrefsGeneral = new GObject.Class({
 
 		let panel = new Gtk.Box({
 			orientation: Gtk.Orientation.VERTICAL,
-			//margin_bottom: 10,
-			//margin_left: 10,
-			//margin_right: 10,
-			//margin_top: 0,
+			margin_bottom: 10,
+			margin_start: 10,
+			margin_end: 10,
+			margin_top: 0,
 			spacing: 5
 		});
 
@@ -304,7 +307,10 @@ const	walNUTPrefsMenu = new GObject.Class({
 
 		this.parent({
 			orientation: Gtk.Orientation.VERTICAL,
-			//margin: 10,
+			margin_start: 10,
+			margin_top: 10,
+			margin_bottom: 10,
+			margin_end: 10,
 			spacing: 5
 		});
 
@@ -360,11 +366,12 @@ const	walNUTPrefsWidget = new GObject.Class({
 		this.parent();
 
 		let notebook = new Gtk.Notebook({
-			//margin_left: 5,
-			//margin_top: 5,
-			//margin_bottom: 5,
-			//margin_right: 5,
-			//expand: true
+			margin_start: 5,
+			margin_top: 5,
+			margin_bottom: 5,
+			margin_end: 5,
+			hexpand: true,
+			vexpand: true
 		});
 
 		let general = new walNUTPrefsGeneral();

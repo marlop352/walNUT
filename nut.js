@@ -2216,7 +2216,7 @@ var	NUTHelper = class {
 	_listRWsGetTypeCallback(args) {
 
 		if (args.error) {
-			this._rws[this._varName].type = 'UNKNOWN';
+			//this._rws[this._varName].type = 'UNKNOWN';
 			this._listRWsGoNext();
 			return;
 		}
